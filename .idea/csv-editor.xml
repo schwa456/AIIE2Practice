@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CsvFileAttributes">
+    <option name="attributeMap">
+      <map>
+        <entry key="\midterm\dataset\TSV Etch Dataset\25um\FDC Data\FDC_25um_Fault_C4F8_90to85_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV Etch Dataset\25um\FDC Data\FDC_25um_Fault_O2_13to11_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV Etch Dataset\25um\FDC Data\FDC_TSV25_ (14).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV Etch Dataset\25um\OES Data\OES_25um_Fault_C4F8_90to85_SCCM.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_25um_Fault_C4F8_90to85_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_25um_Fault_O2_13to11_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_25um_Fault_PlatenPower_17to15_Watt.CSV.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_25um_Fault_SF6_130to122_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_25um_Fault_SourcePower_800to760_Watt.CSV.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(14).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(15).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(16).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(17).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(18).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(19).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(20).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(21).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(22).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(23).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(24).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\25um\FDC_Data\FDC_TSV25_(25).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_80um_Fault_C4F8_90to85_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_80um_Fault_O2_13to11_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_80um_Fault_PlatenPower_17to15_Watt.CSV.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_80um_Fault_SF6_130to122_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_80um_Fault_SourcePower_800to760_Watt.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (14).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (15).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (16).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (17).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (18).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (19).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (20).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (21).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (22).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (23).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (24).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\TSV_Etch_Dataset\80um\FDC Data\FDC_TSV80_ (25).CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\problem2\X_test.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\problem2\X_train.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\dataset\problem2\y_train.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\problem1\TSV_Etch_Dataset\25um\FDC_Data\FDC_25um_Fault_C4F8_90to85_SCCM.CSV">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\midterm\problem1\TSV_Etch_Dataset\25um\OES_Data\OES_25um_Fault_C4F8_90to85_SCCM.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
