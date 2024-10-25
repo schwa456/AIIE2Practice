@@ -4,13 +4,6 @@ import dataPreprocessing
 import numpy as np
 import matplotlib.pyplot as plt
 
-fdc_df = dataPreprocessing.FDCdata('FDC_25um_Fault_C4F8_90to85_SCCM.CSV')
-oes_data = dataPreprocessing.OESdata('OES_25um_Fault_C4F8_90to85_SCCM.csv')
-
-merged_data = dataPreprocessing.merge_FDC_and_OES_data(oes_data, fdc_df)
-
-data_unfolded = dataPreprocessing.unfolding(merged_data)
-
 # Data scaling standardization
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(data_unfolded)
