@@ -3,7 +3,6 @@ import pandas as pd
 from pathlib import Path
 import re
 import openpyxl
-from pandas.io.sas.sas_constants import row_length_offset_multiplier
 
 
 class MidtermData:
@@ -53,8 +52,14 @@ class OESdata(MidtermData):
         self.extension = Path(self.file_name).suffix.lower()
         self.file_path = f'./TSV_Etch_Dataset/{thickness}/{self.data_cat}/{self.file_name}'
         print(f"OES Data from {self.file_name} is created")
-        self.wb = openpyxl.load_workbook(self.file_path)
-        print(f"OES Data workbook is loaded")
+        if self.extension == '.csv':
+            pass
+        elif self.extension == '.xlsx':
+            self.wb = openpyxl.load_workbook(self.file_path)
+            print(f"OES Data workbook is loaded")
+        else:
+            raise ValueError(f'Unsupported File Format: {self.extension}')
+
 
     def get_data_frame(self):
         """
@@ -71,9 +76,9 @@ class OESdata(MidtermData):
         elif extension == '.xlsx':
             sheet = self.wb.active
             data = []
-            for row in sheet.iter_rows(values_only=True):
+            for row in sheet.iter_rows(min_row=3, values_only=True):
                 data.append(row)
-            df = pd.DataFrame(data[3:], columns=data[0])
+            df = pd.DataFrame(data, columns=data[0])
             print(f"data frame of {self.file_name} has created")
             return df
         else:
@@ -89,10 +94,10 @@ class OESdata(MidtermData):
                 if cell.value and isinstance(cell.value, str) and cell.value.startswith('='):
                     formula = cell.value
                     start_cell, end_cell = extract_range_from_formula(formula)
-                    print(f"IDX : {idx}, Start Cell : {start_cell}, End Cell : {end_cell}")
                     cycle_range.append((idx, start_cell, end_cell))
                     idx -= 1
 
+        print(f"Successfully get cycle of {self.file_name}")
         return cycle_range
 
 
@@ -105,7 +110,6 @@ def get_rid_of_space(df, col_name):
 def extract_range_from_formula(formula):
     match = re.search(r"'(\d+)'!\$?[A-Z]+(\d+):\$?[A-Z]+(\d+)", formula)
     if match:
-        print(f"Successfully Extracted Cycle : {match.groups()[0], match.groups()[1], match.groups()[2]}")
         return int(match.groups()[1]), int(match.groups()[2])
     return None, None
 
