@@ -20,10 +20,10 @@ def mRMR(X, y, num_features):
     remaining_features = list(range(n_features))
 
     # 상호정보량 계산
-    relevence = np.array([mutual_info_score(X[:, i], y) for i in range(n_features)])
+    relevance = np.array([mutual_info_score(X[:, i], y) for i in range(n_features)])
 
     # 첫번째 feature 선택(최대 관련성 기준)
-    first_feature = np.argmax(relevence)
+    first_feature = np.argmax(relevance)
     selected_features.append(first_feature)
     remaining_features.remove(first_feature)
 
@@ -34,8 +34,8 @@ def mRMR(X, y, num_features):
 
         # 각 남은 특징에 대해 mRMR 계산
         for feature in remaining_features:
-            redunduncy = np.mean([mutual_info_score(X[:, feature], X[:, f]) for f in selected_features])
-            score = relevence[feature] - redunduncy
+            redundancy = np.mean([mutual_info_score(X[:, feature], X[:, f]) for f in selected_features])
+            score = relevance[feature] - redundancy
 
             # 최대 점수를 가진 특징 선택
             if score > max_score:
