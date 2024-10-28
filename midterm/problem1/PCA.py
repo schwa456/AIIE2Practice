@@ -1,36 +1,111 @@
 import numpy as np
+import pandas as pd
+from sklearn.decomposition import IncrementalPCA
 import matplotlib.pyplot as plt
 
 
-def svd_execution(X):
-    X_centered = X - np.mean(X, axis=0)
+class DynamicPCA:
+    def __init__(self, target_variance=0.9, batch_size=20):
+        self.target_variance = target_variance
+        self.batch_size = batch_size
+        self.n_components = None
+        self.ipca = None
+        self.explained_variance_ratio_ = None
+        self.components_ = None
+        self.scores_ = None
 
-    U, S, Vt = np.linalg.svd(X_centered, full_matrices=False)
+    def fit(self, data) -> None:
+        """
+        Learning IPCA using data, decide n_components dynamically
+        :param data: data frame (sample x feature)
+        :return: None
+        """
+        # Calculate explained variance ratio using initial IPCA
+        ipca = IncrementalPCA(batch_size=self.batch_size)
+        ipca.fit(data)
 
-    return U, S, Vt
+        # calculate cumulative variance
+        self.explained_variance_ratio_ = ipca.explained_variance_ratio_
+        cumulative_variance = np.cumsum(ipca.explained_variance_ratio_)
+        print(cumulative_variance)
 
-def explained_ratio(S):
-    ratio = (S ** 2) / np.sum(S ** 2)
-    return ratio
+        # Finding latent number of components which is over threshold(target_variance)
+        self.n_components = np.argmax(cumulative_variance >= self.target_variance) + 1
+        print(f"Number of Selected Features: {self.n_components}")
 
-def cumulative_ratio(explained_ratio):
-    return np.cumsum(explained_ratio)
+        # Create IPCA instance again with selected components
+        self.ipca = IncrementalPCA(n_components=self.n_components, batch_size=self.batch_size)
+        self.ipca.fit(data)
+        self.components_ = self.ipca.components_
+        self.scores_ = self.ipca.transform(data)
 
-def number_component(cm_ratio, target_variance):
-    n_components = np.argmax(cm_ratio >= target_variance) + 1
-    return n_components
+    def transform(self, data) -> np.ndarray:
+        """
+        Decreasing dimension using learned PCA
+        :param data: (numpy.ndarray) input data (sample x feature)
+        :return: numpy.ndarray
+        """
+        if self.ipca is None:
+            raise ValueError("IPCA is not fitted yet. Use fit() method first.")
+        return self.ipca.transform(data)
 
-def visualizing(cm_ratio, target_variance, n_components):
-    plt.plot(range(1, len(cm_ratio) + 1), cm_ratio, marker='o', linestyle='--', label='Cumulative Variance')
-    plt.axhline(y=target_variance, color='r', linestyle='-', label=f'Target Variance ({target_variance * 100:.2f}%) Threshold')
-    plt.axvline(x=n_components, color='g', linestyle='--', label=f'PC = {n_components}')
-    plt.text(n_components, target_variance, f'PC = {n_components}', ha='center', va='bottom', fontsize=10)
-    plt.xlabel('Number of Components')
-    plt.ylabel('Cumulative Explained Variance')
-    plt.title('Cumulative Explained Variance Plot')
-    plt.grid(True)
-    plt.legend()
-    plt.show()
+    def fit_transform(self, data):
+        """
+        decreasing dimensions using learned PCA
+        :param data: input data (sample x feature)
+        :return: numpy.ndarray
+        """
+        self.fit(data)
+        return self.scores_
+
+    def plot_scree(self) -> None:
+        """
+        visualizing Scree plot for each component's explained variance
+        :return: None
+        """
+        plt.figure(figsize=(8, 5))
+        plt.plot(np.arange(1, len(self.explained_variance_ratio_) + 1),
+                 self.explained_variance_ratio_, marker='o')
+        plt.title('Scree Plot')
+        plt.xlabel('Principal Components')
+        plt.ylabel('Explained Variance Ratio')
+        plt.show()
+
+    def plot_score(self, pc1=1, pc2=2) -> None:
+        """
+        visualizing PC1 and PC2
+        :param pc1: First principal component
+        :param pc2: Second principal component
+        :return: None
+        """
+
+        if self.scores_ is None:
+            raise ValueError("Scores is not fitted yet. Use fit() method first.")
+
+        if pc1 > self.scores_.shape[1] or pc2 > self.scores_.shape[1]:
+            raise ValueError(f"선택한 주성분 번호가 유효하지 않습니다. 사용 가능한 주성분 개수는 {self.scores_.shape[1]}개입니다.")
+
+        plt.figure(figsize=(8, 5))
+        plt.scatter(self.scores_[:, pc1 - 1], self.scores_[:, pc2 - 1], c='b', marker='o')
+        plt.title(f"Score Plot (PC{pc1} vs PC{pc2})")
+        plt.xlabel('Principal Components 1')
+        plt.ylabel('Principal Components 2')
+        plt.show()
+
+    def plot_loading(self, pc=1) -> None:
+        """
+        Visualizing selected PC's Loading
+        :return: None
+        """
+        if self.components_ is None:
+            raise ValueError("Components is not fitted yet. Use fit() method first.")
+
+        plt.figure(figsize=(8, 5))
+        plt.bar(np.arange(len(self.components_[pc - 1])), self.components_[pc-1])
+        plt.title(f'Loading Plot PC{pc}')
+        plt.xlabel('Feature Index')
+        plt.ylabel('Loading Value')
+        plt.show()
 
 def __main__():
     """
@@ -44,14 +119,14 @@ def __main__():
     """
     X = np.random.rand(17, 300)
     print(X)
-    U, S, Vt = svd_execution(X)
-    target_variance = 0.9
-    ex_ratio = explained_ratio(S)
-    cm_ratio = cumulative_ratio(ex_ratio)
-    n_components = number_component(cm_ratio, target_variance)
+    pca = DynamicPCA(0.95)
+    data_reduced = pca.fit_transform(X)
+    print(data_reduced)
+    print(f"Reduced Data Size: {data_reduced.shape}")
 
-    visualizing(cm_ratio, target_variance, n_components)
-
+    pca.plot_scree()
+    pca.plot_score(pc1=1, pc2=2)
+    pca.plot_loading(pc=1)
 
 if __name__ == '__main__':
     __main__()

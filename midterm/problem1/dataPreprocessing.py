@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 import re
-import openpyxl
 
 
 class MidtermData:
@@ -52,13 +51,6 @@ class OESdata(MidtermData):
         self.extension = Path(self.file_name).suffix.lower()
         self.file_path = f'./TSV_Etch_Dataset/{thickness}/{self.data_cat}/{self.file_name}'
         print(f"OES Data from {self.file_name} is created")
-        if self.extension == '.csv':
-            pass
-        elif self.extension == '.xlsx':
-            self.wb = openpyxl.load_workbook(self.file_path)
-            print(f"OES Data workbook is loaded")
-        else:
-            raise ValueError(f'Unsupported File Format: {self.extension}')
 
 
     def get_data_frame(self):
@@ -74,11 +66,7 @@ class OESdata(MidtermData):
             print(f"data frame of {self.file_name} has created")
             return df
         elif extension == '.xlsx':
-            sheet = self.wb.active
-            data = []
-            for row in sheet.iter_rows(min_row=3, values_only=True):
-                data.append(row)
-            df = pd.DataFrame(data, columns=data[0])
+            df = pd.read_excel(file_path, sheet_name=0, header=2)
             print(f"data frame of {self.file_name} has created")
             return df
         else:
