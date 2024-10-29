@@ -1,10 +1,8 @@
+from randomForest import RandomForestRegressor
 from pathlib import Path
-import matplotlib.pyplot as plt
 import pandas as pd
 import data_unfolding
-from mRMR import MRMR
-from PCA import DynamicPCA
-from midterm.problem1.kernalPCA import DynamicKernelPCA
+from LOOCV import LOOCV
 
 
 def get_file_list(folder_path):
@@ -24,7 +22,7 @@ def get_input_data(fdc_file_list, oes_file_list, thickness):
         unfolded_oes = data_unfolding.unfolding_oes(oes_file, thickness)
         unfolded_data = data_unfolding.get_unfolded_x_data(unfolded_fdc, unfolded_oes)
         X = pd.concat([X, unfolded_data])
-    output_path = f'./TSV_Etch_Dataset/{thickness}/X_data.csv'
+    output_path = f'./processed_data/{thickness}/X_data_2.csv'
     X.to_csv(output_path, index=False)
     return X
 
@@ -33,7 +31,7 @@ def get_input_fdc_data(fdc_file_list, thickness):
     for fdc_file in fdc_file_list:
         unfolded_fdc = data_unfolding.unfolding_fdc(fdc_file, thickness)
         X = pd.concat([X, unfolded_fdc])
-    output_path = f'./TSV_Etch_Dataset/{thickness}/FDC_Data/X_fdc_data.csv'
+    output_path = f'./processed_data/{thickness}/FDC_Data/X_fdc_data_2.csv'
     X.to_csv(output_path, index=False)
     return X
 
@@ -42,7 +40,7 @@ def get_input_oes_data(oes_file_list, thickness):
     for oes_file in oes_file_list:
         unfolded_oes = data_unfolding.unfolding_oes(oes_file, thickness)
         X = pd.concat([X, unfolded_oes])
-    output_path = f'./TSV_Etch_Dataset/{thickness}/OES_Data/X_OES_data.csv'
+    output_path = f'./processed_data/{thickness}/OES_Data/X_OES_data_2.csv'
     X.to_csv(output_path, index=False)
     return X
 
@@ -79,32 +77,6 @@ def get_formatted_y(thickness):
 
     return y
 
-def calculate_mRMR(X, y, thickness):
-    num_rows = X.shape[0]
-
-    mRMR = MRMR()
-
-    selected_features = mRMR.get_mRMR(X, y, num_rows)
-    return selected_features
-
-def dynamicPCA(X, target_variance):
-    pca = DynamicPCA(target_variance)
-    data_reduced = pca.fit_transform(X)
-    print(f"Reduced Data Size : {data_reduced.shape}")
-
-    pca.plot_scree()
-    pca.plot_score(pc1=1, pc2=2)
-    pca.plot_loading(pc=1)
-    return data_reduced
-
-def dynamicKernelPCA(X, target_variance):
-    kpca = DynamicKernelPCA(kernel='rbf', gamma=15, target_variance=0.9)
-    data_reduced = kpca.fit_transform(X)
-    print(f"Reduced Data Size : {data_reduced.shape}")
-
-    kpca.visualizing()
-    return data_reduced
-
 
 def __main__():
     thickness = '25um'
@@ -125,18 +97,18 @@ def __main__():
     y = get_formatted_y(thickness)
     print(y)
 
-    #selected_features = calculate_mRMR(X, y, thickness)
-    #print(selected_features)
-
-    pca_data_reduced = dynamicPCA(X, target_variance=0.9)
-    print(f"PCA Data Reduced : {pca_data_reduced}")
-    print(f"PCA Data Reduced Shape : {pca_data_reduced.shape}")
-
-    kpca_data_reduced = dynamicKernelPCA(X, target_variance=0.9)
-    print(f"PCA Data Reduced : {kpca_data_reduced}")
-    print(f"PCA Data Reduced Shape : {kpca_data_reduced.shape}")
+    rf_regressor = RandomForestRegressor(n_estimators=200, max_depth=5, random_state=0)
+    print("Random Forest Regressor has been created")
 
 
+    loocv_rf = LOOCV(rf_regressor)
+    print("LOOCV for RF_Regressor has been created")
+    loocv_rf.fit(X, y)
+
+    metrics = ['mse', 'mape', 'r2']
+    for metric in metrics:
+        print(f"LOOCV of Random Forest Regression using {metric.upper()} : {loocv_rf.mean_score(metric):.4f}")
+    print(f"Random Forest Score for R Squared : {rf_regressor.score(X, y)[2]:.4f}")
 
 if __name__ == '__main__':
     __main__()

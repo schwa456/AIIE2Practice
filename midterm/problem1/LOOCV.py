@@ -1,73 +1,86 @@
-from sklearn.model_selection import LeaveOneOut
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error, r2_score
-from sklearn.base import clone
 import numpy as np
+import pandas as pd
 
 class LOOCV:
-    def __init__(self, model, scoring='mse'):
+    def __init__(self, model):
         """
         LOOCVS(Leave-One-Out Cross Validation) Class
         :param model: model that is used to learning
-        :param scoring: scoring metrics ('mse', 'r2', 'mape')
         """
         self.model = model
-        self.scoring = scoring
-        self.errors = []
+        self.mse_errors = []
+        self.mape_errors = []
+        self.r2_error = None
 
-    def split(self, X):
+    def fit(self, X, y):
         """
-        Split the Data in the LOO way
-        :param X: Data
-        :return: None
+        execute LOOCV for df
+        :param X: X data as nd array
+        :param y: name of target column
+        :return: score measured by scoring metrics
         """
-        n_samples = len(X)
+
+        n_samples, n_features = X.shape
+
         for i in range(n_samples):
-            train_index = np.delete(np.arange(n_samples), i)
-            test_index = np.array([i])
-            yield train_index, test_index
+            mask = np.arange(n_samples) != i
+            if isinstance(X, pd.DataFrame):
+                X_train = X.iloc[mask].values
+                X_test = X.iloc[[i]].values
+            else:
+                X_train = X[mask]
+                X_test = X[i].reshape(-1, 1)
 
-    def fit_predict(self, X, y):
-        """
-        Learns model and predict
-        :param X: input data
-        :param y: target data
-        :return: None
-        """
+            if isinstance(y, pd.Series):
+                y_train = y.iloc[mask].values
+                y_test = y.iloc[i]
+            else:
+                y_train = y[mask]
+                y_test = y[i]
 
-        for train_index, test_index in self.split(X):
-            X_train, X_test = X[train_index], X[test_index]
-            y_train, y_test = y[train_index], y[test_index]
+            self.model.fit(X_train, y_train)
+            y_pred = self.model.predict(X_test)
 
-            model_clone = clone(self.model)
-            model_clone.fit(X_train, y_train)
+            mse_error = self._calculate_score([y_test], y_pred, 'mse')
+            self.mse_errors.append(mse_error)
+            mape_error = self._calculate_score([y_test], y_pred, 'mape')
+            self.mape_errors.append(mape_error)
+            self.r2_error = r2_score(y_test, y_pred)
 
-            y_pred = model_clone.predict(X_test)
-            error = self._calculate_score(y_test, y_pred)
-            self.errors.append(error)
-
-    def _calculate_score(self, y_test, y_pred):
+    def _calculate_score(self, y_test, y_pred, scoring):
         """
         calculate score in the designated way
         :param y_test: y_test data
         :param y_pred: y_prediction data
         :return: score
         """
-        if self.scoring == 'r2':
-            return r2_score(y_test, y_pred)
-        elif self.scoring == 'mape':
+        if scoring == 'mape':
             return mean_absolute_percentage_error(y_test, y_pred)
-        elif self.scoring == 'mse':
+        elif scoring == 'mse':
             return mean_squared_error(y_test, y_pred)
+        elif scoring == 'r2':
+            r2_error = r2_score(y_test, y_pred)
+            return r2_error
         else:
-            raise ValueError("Not supported Metrics. Use 'mse', 'mape', or 'r2'.")
+            raise ValueError("Not supported Metrics. Use 'mse' or 'mape'.")
 
-    def mean_score(self):
+    def mean_score(self, scoring):
         """
         calculate mean score
+        :param y_test: y_test data
+        :param y_pred: y_pred data
+        :param scoring: scoring metrics
         :return: mean_score
         """
-        return np.mean(self.errors)
+
+        if scoring == 'mape':
+            return np.mean(self.mape_errors)
+        elif scoring == 'mse':
+            return np.mean(self.mse_errors)
+        elif scoring == 'r2':
+            return self.r2_error
 
 def __main__():
     # 데이터 생성
@@ -75,20 +88,12 @@ def __main__():
     y = np.array([1, 4, 9, 16, 25])
 
     # LOOCV 클래스 사용
-    model_mse = LinearRegression()
-    loocv_mse = LOOCV(model_mse, scoring='mse')  # MSE를 성능 지표로 사용
-    loocv_mse.fit_predict(X, y)
-    print(f"Mean Squared Error: {loocv_mse.mean_score():.4f}")
-
-    model_mape = LinearRegression()
-    loocv_mape = LOOCV(model_mape, scoring='mape')  # MAPE를 성능 지표로 사용
-    loocv_mape.fit_predict(X, y)
-    print(f"Mean Absolute Percentage Error: {loocv_mape.mean_score():.4f}")
-
-    model_r2 = LinearRegression()
-    loocv_r2 = LOOCV(model_r2, scoring='r2')  # R2를 성능 지표로 사용
-    loocv_r2.fit_predict(X, y)
-    print(f"R Squared Error: {loocv_r2.mean_score():.4f}")
+    model = LinearRegression()
+    loocv = LOOCV(model)  # MSE를 성능 지표로 사용
+    loocv.fit_predict(X, y)
+    print(f"Mean Squared Error: {loocv.mean_score('mse'):.4f}")
+    print(f"R Squared Error: {loocv.mean_score('r2'):.4f}")
+    print(f"Mean Absolute Percentage Error: {loocv.mean_score('mape'):.4f}")
 
 if __name__ == '__main__':
     __main__()
