@@ -10,13 +10,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\midterm\problem1\TSV_Etch_Dataset\25um\FDC_Data\X_fdc_data.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\midterm\problem1\TSV_Etch_Dataset\25um\OES_Data\OES_25um_Fault_C4F8_90to85_SCCM.csv">
           <value>
             <Attribute>
