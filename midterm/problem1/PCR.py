@@ -1,5 +1,4 @@
 import numpy as np
-from pandas.errors import ValueLabelTypeMismatch
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_percentage_error
 

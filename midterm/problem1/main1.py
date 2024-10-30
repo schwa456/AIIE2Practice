@@ -149,15 +149,15 @@ def __main__():
 
     metrics = ['mse', 'mape']
     for metric in metrics:
-        loocv_pca = LOOCV(pca_pcr, scoring=metric)
+        loocv_pca = LOOCV(pca_pcr)
         loocv_pca.fit(X_pca, y)
-        print(f"LOOCV of PCR with PCA using {metric.upper()} : {loocv_pca.mean_score():.4f}")
+        print(f"LOOCV of PCR with PCA using {metric.upper()} : {loocv_pca.mean_score(metric):.4f}")
     print(f"PCR with PCA using R² : {pca_pcr.score(X_pca, y)[2]}")
 
     for metric in metrics:
-        loocv_kpca = LOOCV(kpca_pcr, scoring=metric)
+        loocv_kpca = LOOCV(kpca_pcr)
         loocv_kpca.fit(X_kpca, y)
-        print(f"LOOCV of PCR with KPCA using {metric.upper()} : {loocv_kpca.mean_score():.4f}")
+        print(f"LOOCV of PCR with KPCA using {metric.upper()} : {loocv_kpca.mean_score(metric):.4f}")
     print(f"PCR with PCA using R² : {kpca_pcr.score(X_kpca, y)[2]}")
 
 if __name__ == '__main__':
