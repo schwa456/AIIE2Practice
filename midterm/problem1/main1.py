@@ -6,7 +6,17 @@ from PCA import DynamicPCA
 from LOOCV import LOOCV
 from kernelPCA import DynamicKernelPCA
 from PCR import PCR
+import os
+import time
 
+def timer(func):
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter()
+        print(f"{func.__name__} took {end-start:.2f} seconds")
+        return result
+    return wrapper
 
 def get_file_list(folder_path):
     # Get file name list of each FDC and OES Data
@@ -29,24 +39,6 @@ def get_input_data(fdc_file_list, oes_file_list, thickness):
     X.to_csv(output_path, index=False)
     return X
 
-def get_input_fdc_data(fdc_file_list, thickness):
-    X = pd.DataFrame()
-    for fdc_file in fdc_file_list:
-        unfolded_fdc = data_unfolding.unfolding_fdc(fdc_file, thickness)
-        X = pd.concat([X, unfolded_fdc])
-    output_path = f'./processed_data/{thickness}/FDC_Data/X_fdc_data.csv'
-    X.to_csv(output_path, index=False)
-    return X
-
-def get_input_oes_data(oes_file_list, thickness):
-    X = pd.DataFrame()
-    for oes_file in oes_file_list:
-        unfolded_oes = data_unfolding.unfolding_oes(oes_file, thickness)
-        X = pd.concat([X, unfolded_oes])
-    output_path = f'./processed_data/{thickness}/OES_Data/X_OES_data.csv'
-    X.to_csv(output_path, index=False)
-    return X
-
 def get_depth(thickness):
     """
     get Series of Depth from TSV_Depth_new.xlsx, given thickness
@@ -64,8 +56,9 @@ def get_depth(thickness):
 
     return full_depth
 
+@timer
 def normalize(X):
-    X = X.apply(pd.to_numeric, errors='coerce').fillna(X.median())
+    X = X.apply(pd.to_numeric, errors='coerce').fillna(0)
     X = X.loc[:, X.std() != 0]
     std = X.std() + 1e-8
     X_normalized = X / std
@@ -80,14 +73,7 @@ def get_formatted_y(thickness):
 
     return y
 
-def calculate_mRMR(X, y, thickness):
-    num_rows = X.shape[0]
-
-    mRMR = MRMR()
-
-    selected_features = mRMR.get_mRMR(X, y, num_rows)
-    return selected_features
-
+@timer
 def dynamicPCA(X, target_variance):
     pca = DynamicPCA(target_variance)
     data_reduced = pca.fit_transform(X)
@@ -98,8 +84,9 @@ def dynamicPCA(X, target_variance):
     pca.plot_loading(pc=1)
     return data_reduced, pca
 
+@timer
 def dynamicKernelPCA(X, target_variance):
-    kpca = DynamicKernelPCA(kernel='rbf', gamma=15, target_variance=0.9)
+    kpca = DynamicKernelPCA(kernel='linear', gamma=15, target_variance=0.9)
     data_reduced = kpca.fit_transform(X)
     print(f"Reduced Data Size : {data_reduced.shape}")
 
@@ -109,16 +96,20 @@ def dynamicKernelPCA(X, target_variance):
 
 def __main__():
     thickness = '25um'
-    fdc_folder_path = f'./TSV_Etch_Dataset/{thickness}/FDC_Data'
-    #oes_folder_path = f'./TSV_Etch_Dataset/{thickness}/OES_Data'
 
-    fdc_file_list = get_file_list(fdc_folder_path)
-    #oes_file_list = get_file_list(oes_folder_path)
+    if 'X_data.csv' in os.listdir(f'./processed_data/{thickness}'):
+        X = pd.read_csv(f'./processed_data/{thickness}/X_data.csv')
+    else:
+        fdc_folder_path = f'./TSV_Etch_Dataset/{thickness}/FDC_Data'
+        oes_folder_path = f'./TSV_Etch_Dataset/{thickness}/OES_Data/csv'
 
-    #X = get_input_data(fdc_file_list, oes_file_list, thickness)
-    X = get_input_fdc_data(fdc_file_list, thickness)
-    #X = get_input_oes_data(oes_file_list, thickness)
+        fdc_file_list = get_file_list(fdc_folder_path)
+        oes_file_list = get_file_list(oes_folder_path)
 
+        X = get_input_data(fdc_file_list, oes_file_list, thickness)
+
+
+    X = pd.read_csv(f'./processed_data/{thickness}/X_data.csv').fillna(0)
     print(X)
     X = normalize(X)
     print(X)
@@ -126,16 +117,13 @@ def __main__():
     y = get_formatted_y(thickness)
     print(y)
 
-    #selected_features = calculate_mRMR(X, y, thickness)
-    #print(selected_features)
-
     X_pca, pca = dynamicPCA(X, target_variance=0.9)
     print(f"PCA Data Reduced : {X_pca}")
     print(f"PCA Data Reduced Shape : {X_pca.shape}")
 
     X_kpca, kpca = dynamicKernelPCA(X, target_variance=0.9)
-    print(f"Kernel PCA Data Reduced with RBF : {X_kpca}")
-    print(f"Kernel PCA Data Reduced Shape RBF : {X_kpca.shape}")
+    print(f"Kernel PCA Data Reduced with Linear : {X_kpca}")
+    print(f"Kernel PCA Data Reduced Shape Linear : {X_kpca.shape}")
 
     pca_pcr = PCR()
     pca_pcr.fit(X_pca, y)

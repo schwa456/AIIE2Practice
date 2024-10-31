@@ -1,8 +1,8 @@
 import dataPreprocessing as DP
 import pandas as pd
-import dask.dataframe as dd
-import dask.array as da
 import time
+import numpy as np
+import matplotlib.pyplot as plt
 
 def timer(func):
     def wrapper(*args, **kwargs):
@@ -13,64 +13,106 @@ def timer(func):
         return result
     return wrapper
 
+@timer
+def get_cycle_range_by_FFT(df, file_name):
+    # 시간 데이터를 초 단위로 변환
+    df['Time_in_seconds'] = df['Time(sec)'].apply(time_to_second)
+    time = df['Time_in_seconds'].values
+
+    # 각 시간에 대한 모든 파장의 평균 강도 계산
+    intensity_avg = df.iloc[:, 1:-1].mean(axis=1).values  # 모든 파장 열의 평균 강도
+
+    # FFT 수행
+    intensity_avg -= np.mean(intensity_avg)  # DC 성분 제거
+    fft_result = np.fft.fft(intensity_avg)
+    fft_freq = np.fft.fftfreq(len(intensity_avg), d=np.mean(np.diff(time)))
+
+    # 주파수 스펙트럼 시각화
+    magnitude = np.abs(fft_result)
+    half_len = len(intensity_avg) // 2
+
+    # 올바른 주파수를 찾기 위해 DC 성분 제외하고 최대값 찾기
+    peak_freq = fft_freq[1:half_len][np.argmax(magnitude[1:half_len]) + 1]
+    period = 1 / peak_freq if peak_freq != 0 else float('inf')
+    period = period * 2
+
+    # 주기가 너무 큰지 체크하고, 데이터 범위에 맞게 50번 반복
+    max_time = time[-1]  # 전체 데이터의 시간 범위 끝
+    if period * 50 > max_time:
+        print(f"계산된 주기가 데이터의 전체 길이보다 길게 나옵니다. 주기: {period} 초")
+        return peak_freq, period, None
+
+    # 50번 반복 주기에 해당하는 주기 점선 위치 계산
+    cycle_points = [time[0] + period * i for i in range(1, 51) if period * i <= max_time]
+
+    # 평균 강도 시각화 및 주기별 점선 표시
+    plt.figure(figsize=(10, 6))
+    plt.plot(time, intensity_avg, 'b-', label="Average Intensity")
+
+    # 주기별로 수직 점선 그리기
+    for cp in cycle_points:
+        plt.axvline(x=cp, color='r', linestyle='--', alpha=0.7)
+
+    plt.xlabel("Time (sec)")
+    plt.ylabel("Average Intensity (A.U.)")
+    plt.title(f"Average Intensity over Time with Repeated Cycles with file name {file_name}")
+    plt.legend(["Average Intensity", "Cycle Intervals"])
+    plt.grid(True)
+    plt.show()
+
+    df['Cycle_group'] = (df['Time_in_seconds'] // period).astype(int)
+
+    df = df.drop(columns=['Time(sec)', 'Time_in_seconds'])
+
+    return df
+
+def time_to_second(time_str):
+    hours, minutes, seconds = 0, 0, 0
+    if 'h' in time_str:
+        hours = int(time_str.split('h')[0])
+        time_str = time_str.split('h')[1]
+    if 'm' in time_str:
+        minutes = int(time_str.split('m')[0])
+        time_str = time_str.split('m')[1]
+    if 's' in time_str:
+        seconds = int(time_str.split('s')[0])
+    return hours * 3600 + minutes * 60 + seconds
+
 def grouped_fdc(fdc_df):
     """
     get grouped FDC data from its df whose ASE Cycle value is not 0
     :param fdc_df: FDC df
-    :return: grouped OES data in form of df
+    :return: grouped FDC data in form of df
     """
     fdc_df = fdc_df[fdc_df['ASE Cycles'] != 0]
-    fdc_grouped = [group for _, group in fdc_df.groupby("ASE Cycles")]
-    fdc_grouped_sorted = sorted(fdc_grouped, key=lambda group: group["ASE Cycles"].iloc[0], reverse=True)
+    fdc_df = fdc_df.iloc[:, 1:22]
+    fdc_df.drop(columns=['Process Phase', 'ASE Phase'], inplace=True)
+    fdc_grouped = fdc_df.groupby("ASE Cycles")
 
     print("Successfully Create Grouped FDC Data")
-    return fdc_grouped_sorted
+    return fdc_grouped
 
-def grouped_oes(oes_df, oes_cycle):
+def grouped_oes(oes_df, oes_file):
     """
     grouping OES Data using all the Cycle range
     :param oes_df: OES df
-    :param oes_cycle:
     :return:
     """
-    oes_group_lst = []
 
-    for cycle, start_cell_num, end_cell_num in oes_cycle:
-        # extract the data from current range
-
-        data = get_data_from_range(oes_df, start_cell_num, end_cell_num)
-
-        # converting as DataFrame and adding Cycle label
-        df = pd.DataFrame(data, columns=oes_df.columns)
-        df["Cycle"] = cycle
-        df = df.iloc[:, 1:]
-        oes_group_lst.append(df)
-
-    # Merging all cycle data
-    concat_oes_df = pd.concat(oes_group_lst, ignore_index=True)
-
-    oes_grouped = [group for _, group in concat_oes_df.groupby("Cycle")]
-    oes_grouped_sorted = sorted(oes_grouped, key=lambda group: group["Cycle"].iloc[0], reverse=True)
+    oes_fft_df = get_cycle_range_by_FFT(oes_df, oes_file)
+    oes_grouped_df = oes_fft_df.groupby('Cycle_group')
 
     print("Successfully Create Grouped OES Data")
+    return oes_grouped_df
 
-    return oes_grouped_sorted
+@timer
+def unfolding_df(grouped_df):
+    mean_group_df = grouped_df.mean()
+    col_names = [f"{col}_{i}" for i in range(mean_group_df.shape[0]) for col in mean_group_df.columns]
+    flattened_value = mean_group_df.values.flatten()
+    merged_row_df = pd.DataFrame([flattened_value], columns=col_names)
 
-def get_data_from_range(oes_df, start_cell_num, end_cell_num):
-    """
-    extracting data from the cell range of the specific sheet
-    :param oes_df: OES df
-    :param start_cell_num: start cell number of the range
-    :param end_cell_num: end cell number of the range
-    :return:
-    """
-    data = oes_df.iloc[start_cell_num - 1:end_cell_num + 1]
-    return data
-
-def unfolding_df(df):
-    row_vector = df.values.flatten()
-    merged_row_vector = pd.DataFrame([row_vector])
-    return merged_row_vector
+    return merged_row_df
 
 @timer
 def unfolding_fdc(fdc_file, thickness):
@@ -85,26 +127,10 @@ def unfolding_fdc(fdc_file, thickness):
 
     fdc_df = fdc_data.get_data_frame()
 
-    fdc_df.columns = fdc_df.columns.str.strip()
-    # filtering only the columns whose ASE Cycles column has actual value
-    if 'ASE Cycles' in fdc_df.columns:
-        fdc_df = fdc_df[fdc_df['ASE Cycles'] != 0]
-    else:
-        print("Column named 'ASE Cycles' Does Not Exist")
+    fdc_grouped = grouped_fdc(fdc_df)
 
-    # select numeric columns
-    all_features = fdc_df.columns.tolist()
-    fdc_df = fdc_df[all_features[0:19]]
-
-    fdc_row_vector = fdc_df.values.flatten()
-
-    fdc_col_names = [f"{col}_{i}" for i in range(fdc_df.shape[0]) for col in fdc_df.columns]
-
-    fdc_flattened_data = pd.DataFrame([fdc_row_vector], columns=fdc_col_names)
-    print("FDC Flattened Data")
-    print(fdc_flattened_data)
-
-    return fdc_flattened_data
+    unfolded_fdc = unfolding_df(fdc_grouped)
+    return unfolded_fdc
 
 @timer
 def unfolding_oes(oes_file, thickness):
@@ -117,55 +143,13 @@ def unfolding_oes(oes_file, thickness):
     oes_data = DP.OESdata(oes_file, thickness)
 
     oes_df = oes_data.get_data_frame()
-    oes_df = oes_df.loc[:, ~oes_df.columns.str.startswith('Unnamed')]
 
-    # select numeric columns
-    all_features = oes_df.columns.tolist()
-    oes_df = oes_df[all_features[1:]]
+    oes_grouped = grouped_oes(oes_df, oes_file)
 
-    oes_row_vector = oes_df.values.flatten()
-    print("OES row vector has been created.")
-    print(oes_row_vector)
+    unfolded_oes = unfolding_df(oes_grouped)
+    return unfolded_oes
 
-    oes_row_vector_2d = oes_row_vector.reshape(1, -1)
-
-    oes_col_names = [f"{col}_{i}" for i in range(oes_df.shape[0]) for col in oes_df.columns]
-    print("OES Columns names have been determined.")
-
-    n_partition = 5
-    chunk_size = oes_row_vector_2d.shape[1] // n_partition
-    remainder = oes_row_vector_2d.shape[1] % n_partition
-    print(f"Chunk size is {chunk_size}, remaining is {remainder}")
-
-    chunks = [(1, ) + (chunk_size, )] * (n_partition - 1) + [(chunk_size + remainder, )]
-    print(f"Chunks : {chunks}")
-
-    dask_array = [
-        da.from_array(
-            oes_row_vector_2d[:, i * chunk_size : (i+1) * chunk_size],
-            chunks=(1, chunk_size),
-            )
-            for i in range(n_partition - 1)
-        ]
-    dask_array.append(
-        da.from_array(
-            oes_row_vector_2d[:, (n_partition - 1) * chunk_size : ],
-            chunks = (1, chunk_size + remainder)
-        )
-    )
-    dask_array = da.concatenate(dask_array, axis=1)
-    print("Dask Array has been created")
-    print(f"Dask Array Shape : {dask_array.shape}, Chunks : {dask_array.chunks}")
-
-    ddf = dd.from_dask_array(dask_array, columns=oes_col_names)
-    print("Dask Data Frame has been created")
-
-    oes_flattened_data = ddf.compute()
-
-    print("OES Flattened Data")
-    print(oes_flattened_data)
-
-
+@timer
 def get_unfolded_x_data(unfolded_fdc, unfolded_oes):
     """
     make unfolded X data (1 row) merging FDC data and OES Data
@@ -188,5 +172,9 @@ def get_unfolded_x_data(unfolded_fdc, unfolded_oes):
 if __name__ == "__main__":
     fdc_file = "FDC_TSV25_(14).CSV"
     oes_file = "S2514.xlsx"
+    thickness = '25um'
 
-    get_unfolded_x_data(fdc_file, oes_file)
+    unfolded_fdc = unfolding_fdc(fdc_file, thickness)
+    unfolded_oes = unfolding_oes(oes_file, thickness)
+
+    get_unfolded_x_data(unfolded_fdc, unfolded_oes)
