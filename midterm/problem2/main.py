@@ -90,12 +90,12 @@ def __main__():
     y_train = y_train.squeeze()
     print("All Data has been called")
 
-    rf_pred = rf_classifing_loo(X_train, y_train, X_test)
-    rf_pred = pd.DataFrame(rf_pred, columns=['Y'])
-    rf_pred.to_csv('rf_pred.csv', index=False)
+    #rf_pred = rf_classifing_loo(X_train, y_train, X_test)
+    #rf_pred = pd.DataFrame(rf_pred, columns=['Y'])
+    #rf_pred.to_csv('rf_pred.csv', index=False)
 
     n_estimators_list = [100, 200, 300]
-    learning_rate_list = [0.01, 0.02, 0.05]
+    learning_rate_list = [0.1]
     for n_estimators in n_estimators_list:
         for learning_rate in learning_rate_list:
             gbm_pred = gbm_classifing_loo(X_train, y_train, X_test, n_estimators, learning_rate)
