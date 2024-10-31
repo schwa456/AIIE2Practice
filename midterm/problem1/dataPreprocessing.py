@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 import openpyxl
 import time
+import csv
 
 def timer(func):
     def wrapper(*args, **kwargs):
@@ -78,7 +79,7 @@ class OESdata(MidtermData):
             print(f"data frame of {self.file_name} has created")
             return df
         elif extension == '.xlsx':
-            df = pd.read_excel(file_path, sheet_name=0, header=2)
+            df = pd.read_excel(file_path, sheet_name=1, header=None)
             print(f"data frame of {self.file_name} has created")
             return df
         else:
@@ -118,12 +119,6 @@ def get_rid_of_space(df, col_name):
 
     return df
 
-def extract_range_from_formula(formula):
-    match = re.search(r"'(\d+)'!\$?[A-Z]+(\d+):\$?[A-Z]+(\d+)", formula)
-    if match:
-        return int(match.groups()[1]), int(match.groups()[2])
-    return None, None
-
 def get_file_list(folder_path):
     # Get file name list of each FDC and OES Data
     folder_path = Path(folder_path)
@@ -132,18 +127,6 @@ def get_file_list(folder_path):
     print(file_list)
 
     return file_list
-
-def get_range_data(oes_file_list, thickness):
-    total_range_lst = []
-    for oes_file in oes_file_list:
-        oes_data = OESdata(oes_file, thickness)
-        cycle_range_data = oes_data.get_cycle()
-        cycle_range = []
-        for cycle in cycle_range_data:
-            cycle_range.append(cycle[3])
-        total_range_lst.append(cycle_range)
-
-    return total_range_lst
 
 def __main__():
 
@@ -154,17 +137,11 @@ def __main__():
     for oes_file in oes_file_list:
         if '.xlsx' in oes_file:
             oes_xlsx_list.append(oes_file)
-    print(oes_xlsx_list)
-    total_cycle_range = get_range_data(oes_xlsx_list, thickness)
-    print(total_cycle_range)
 
-    avg_range = []
-    for j in range(len(total_cycle_range[0])):
-        for i in range(len(total_cycle_range)):
-            cycle_sum = 0
-            cycle_sum += total_cycle_range[i][j]
-            avg_range.append(cycle_sum/len(total_cycle_range))
-    print(avg_range)
+    print(oes_xlsx_list)
+    oes_data = OESdata(oes_xlsx_list[1], thickness)
+    oes_df = oes_data.get_data_frame()
+    print(oes_df)
 
 
 
