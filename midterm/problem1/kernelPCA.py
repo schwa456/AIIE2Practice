@@ -5,7 +5,7 @@ from sklearn.metrics import explained_variance_score
 
 
 class DynamicKernelPCA:
-    def __init__(self, kernel='linear', gamma=None, degree=3, coef0=1, alpha=1.0, target_variance=0.9):
+    def __init__(self, kernel='poly', gamma=None, degree=3, coef0=1, alpha=1.0, target_variance=0.9):
         """
         Kernal PCA Class
         :param kernel: kernel used for fitting('linear, 'poly', 'rbf', 'sigmoid')

@@ -4,19 +4,21 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_percenta
 
 class PCR:
     def __init__(self):
-        self.model = LinearRegression()
+        self.model = LinearRegression(fit_intercept=True)
         self.coefficients_ = None
+        self.intercept_ = None
 
     def fit(self, X, y):
         self.model.fit(X, y)
         self.coefficients_ = self.model.coef_
+        self.intercept_ = self.model.intercept_
 
     def predict(self, X):
         return self.model.predict(X)
 
     def get_coefficients(self):
-        if self.coefficients_ is not None:
-            return self.coefficients_
+        if self.coefficients_ is not None and self.intercept_ is not None:
+            return self.coefficients_, self.intercept_
         else:
             raise ValueError("PCR is not fitted yet, Use fit() method first.")
 

@@ -170,8 +170,8 @@ def get_unfolded_x_data(unfolded_fdc, unfolded_oes):
 
 
 if __name__ == "__main__":
-    fdc_file = "FDC_TSV25_(14).CSV"
-    oes_file = "S2514.xlsx"
+    fdc_file = "FDC_25um_Fault_C4F8_90to85_SCCM.CSV"
+    oes_file = "OES_25um_Fault_C4F8_90to85_SCCM.csv"
     thickness = '25um'
 
     unfolded_fdc = unfolding_fdc(fdc_file, thickness)

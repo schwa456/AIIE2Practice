@@ -1,8 +1,17 @@
 import numpy as np
 import pandas as pd
-from collections import Counter
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_percentage_error
+import time
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter()
+        print(f"{func.__name__} took {end-start:.2f} seconds")
+        return result
+    return wrapper
 
 
 class RandomForestRegressor:
@@ -55,6 +64,7 @@ class RandomForestRegressor:
 
         return selected_features
 
+    @timer
     def fit(self, X, y):
         """
         fitting Random Forest model

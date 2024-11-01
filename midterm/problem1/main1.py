@@ -1,7 +1,6 @@
 from pathlib import Path
 import pandas as pd
 import data_unfolding
-from mRMR import MRMR
 from PCA import DynamicPCA
 from LOOCV import LOOCV
 from kernelPCA import DynamicKernelPCA
@@ -86,7 +85,7 @@ def dynamicPCA(X, target_variance):
 
 @timer
 def dynamicKernelPCA(X, target_variance):
-    kpca = DynamicKernelPCA(kernel='linear', gamma=15, target_variance=0.9)
+    kpca = DynamicKernelPCA(kernel='poly', gamma=15, target_variance=0.9)
     data_reduced = kpca.fit_transform(X)
     print(f"Reduced Data Size : {data_reduced.shape}")
 
@@ -98,7 +97,7 @@ def __main__():
     thickness = '25um'
 
     if 'X_data.csv' in os.listdir(f'./processed_data/{thickness}'):
-        X = pd.read_csv(f'./processed_data/{thickness}/X_data.csv')
+        X = pd.read_csv(f'./processed_data/{thickness}/X_data.csv').fillna(0)
     else:
         fdc_folder_path = f'./TSV_Etch_Dataset/{thickness}/FDC_Data'
         oes_folder_path = f'./TSV_Etch_Dataset/{thickness}/OES_Data/csv'
@@ -106,10 +105,8 @@ def __main__():
         fdc_file_list = get_file_list(fdc_folder_path)
         oes_file_list = get_file_list(oes_folder_path)
 
-        X = get_input_data(fdc_file_list, oes_file_list, thickness)
+        X = get_input_data(fdc_file_list, oes_file_list, thickness).fillna(0)
 
-
-    X = pd.read_csv(f'./processed_data/{thickness}/X_data.csv').fillna(0)
     print(X)
     X = normalize(X)
     print(X)
@@ -122,18 +119,20 @@ def __main__():
     print(f"PCA Data Reduced Shape : {X_pca.shape}")
 
     X_kpca, kpca = dynamicKernelPCA(X, target_variance=0.9)
-    print(f"Kernel PCA Data Reduced with Linear : {X_kpca}")
-    print(f"Kernel PCA Data Reduced Shape Linear : {X_kpca.shape}")
+    print(f"Kernel PCA Data Reduced with Poly : {X_kpca}")
+    print(f"Kernel PCA Data Reduced Shape Poly : {X_kpca.shape}")
 
     pca_pcr = PCR()
     pca_pcr.fit(X_pca, y)
-    pca_coefficient = pca_pcr.get_coefficients()
+    pca_coefficient, pca_intercept = pca_pcr.get_coefficients()
     print(f"Regression Coefficient with PCA : {pca_coefficient}")
+    print(f"Regression Intercept with PCA : {pca_intercept}")
 
     kpca_pcr = PCR()
     kpca_pcr.fit(X_kpca, y)
-    kpca_coefficient = kpca_pcr.get_coefficients()
+    kpca_coefficient, kpca_intercept = kpca_pcr.get_coefficients()
     print(f"Regression Coefficient with KPCA : {kpca_coefficient}")
+    print(f"Regression Intercept with KPCA : {kpca_intercept}")
 
     metrics = ['mse', 'mape']
     for metric in metrics:
@@ -146,7 +145,7 @@ def __main__():
         loocv_kpca = LOOCV(kpca_pcr)
         loocv_kpca.fit(X_kpca, y)
         print(f"LOOCV of PCR with KPCA using {metric.upper()} : {loocv_kpca.mean_score(metric):.4f}")
-    print(f"PCR with PCA using R² : {kpca_pcr.score(X_kpca, y)[2]}")
+    print(f"PCR with KPCA using R² : {kpca_pcr.score(X_kpca, y)[2]}")
 
 if __name__ == '__main__':
     __main__()

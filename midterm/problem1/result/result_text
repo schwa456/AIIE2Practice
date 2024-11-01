@@ -1,3 +1,4 @@
+C:\Users\HJkim\PycharmProjects\cat_status\.venv\Scripts\python.exe C:\Users\HJkim\PycharmProjects\AIIE2Practice\midterm\problem1\main1.py
             0          1         2  ...       388379       388380       388381
 0   37.852632  71.478947  7.478947  ...     0.000000     0.000000     0.000000
 1   34.842105  76.342105  6.326316  ...     0.000000     0.000000     0.000000
@@ -18,7 +19,7 @@
 16  40.178947  74.226316  7.494737  ...     0.000000     0.000000     0.000000
 
 [17 rows x 388382 columns]
-normalize took 21.36 seconds
+normalize took 20.83 seconds
             0          1          2  ...    388379    388380    388381
 0   14.366175  29.107270  18.092640  ...  0.000000  0.000000  0.000000
 1   13.223593  31.087618  15.304260  ...  0.000000  0.000000  0.000000
@@ -62,7 +63,7 @@ Name: Depth, dtype: float64
  0.99979651 0.9998801  0.99994302 1.         1.        ]
 Number of Selected Features: 2
 Reduced Data Size : (17, 2)
-dynamicPCA took 163.24 seconds
+dynamicPCA took 163.97 seconds
 PCA Data Reduced : [[ 277.19745998  -12.93682916]
  [ 278.34868789  -11.7690025 ]
  [-576.31323173  650.27151629]
@@ -83,7 +84,7 @@ PCA Data Reduced : [[ 277.19745998  -12.93682916]
 PCA Data Reduced Shape : (17, 2)
 Number of Selected Components: 2
 Reduced Data Size : (17, 2)
-dynamicKernelPCA took 1.73 seconds
+dynamicKernelPCA took 1.70 seconds
 Kernel PCA Data Reduced with Linear : [[-277.19745998  -12.93682916]
  [-278.34868789  -11.7690025 ]
  [ 576.31323173  650.27151629]
@@ -105,15 +106,18 @@ Kernel PCA Data Reduced Shape Linear : (17, 2)
 Regression Coefficient with PCA : [ 0.00096398 -0.00147323]
 Regression Coefficient with KPCA : [-0.00096398 -0.00147323]
 
-fit took 0.02 seconds
+fit took 0.04 seconds
 LOOCV of PCR with PCA using MSE : 208.3308
-fit took 0.02 seconds
+
+
+fit took 0.01 seconds
 LOOCV of PCR with PCA using MAPE : 0.1357
 PCR with PCA using R² : 0.07035668126101524
 
-
-fit took 0.02 seconds
+fit took 0.01 seconds
 LOOCV of PCR with KPCA using MSE : 208.3308
-fit took 0.02 seconds
+fit took 0.01 seconds
 LOOCV of PCR with KPCA using MAPE : 0.1357
 PCR with PCA using R² : 0.07035668126101491
+
+종료 코드 0(으)로 완료된 프로세스
