@@ -12,6 +12,7 @@ def get_X_data():
     return X_data
 
 def get_filtered_X_data(X_data, filtering_idx):
+    X_data = X_data.drop(columns=['ID'])
     filtered_X_data = X_data.drop(index=filtering_idx)
     return filtered_X_data
 
@@ -76,10 +77,11 @@ def get_cat_box_plot(variance_df):
     plt.show()
 
 
-def cat_variable_reduction(X_data, y):
+def cat_variable_reduction(X_data, y, viz=False):
     variance_df = get_cat_variance_df(X_data, y)
 
-    get_cat_box_plot(variance_df)
+    if viz:
+        get_cat_box_plot(variance_df)
 
     reducible_variable = get_cat_reducible_vars(variance_df)
 
@@ -126,10 +128,11 @@ def get_duplicated_variance(variance_df):
     return duplicated_df
 
 
-def bin_variable_reduction(X_data):
+def bin_variable_reduction(X_data, viz=False):
     variance_df = get_binary_variance_df(X_data)
 
-    get_bin_scatter_plot(variance_df)
+    if viz:
+        get_bin_scatter_plot(variance_df)
 
     zero_df = get_zero_variance(variance_df)
     zero_idx = zero_df['index'].tolist()
@@ -146,12 +149,12 @@ def bin_variable_reduction(X_data):
 
 ################################################
 
-def get_reduced_X(X_data, y):
+def get_reduced_X(X_data, y, viz=False):
     reducible_vars = []
-    cat_red_var = cat_variable_reduction(X_data, y)
+    cat_red_var = cat_variable_reduction(X_data, y, viz)
     reducible_vars.extend(cat_red_var)
     ########################
-    bin_red_var = bin_variable_reduction(X_data)
+    bin_red_var = bin_variable_reduction(X_data, viz)
     reducible_vars.extend(bin_red_var)
 
     X_reduced = X_data.drop(columns=reducible_vars)
@@ -170,7 +173,6 @@ def __main__():
 
     X_data = get_X_data()
     filtered_X_data = get_filtered_X_data(X_data, filtering_idx)
-
 
     X_reduced = get_reduced_X(filtered_X_data, y)
 

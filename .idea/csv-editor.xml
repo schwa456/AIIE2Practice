@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="\finalterm\check\OLS_results.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\finalterm\check\X_label_encoded.csv">
           <value>
             <Attribute>
@@ -11,6 +18,20 @@
           </value>
         </entry>
         <entry key="\finalterm\check\X_reduced.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\finalterm\check\interaction_df.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\finalterm\check\y.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

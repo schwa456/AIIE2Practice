@@ -39,6 +39,7 @@ def get_number_of_outliers(y, outlier_boundary):
 
 def get_filtered_y(y, outliers):
     filtered_y = y[~y.isin(outliers['y'])]
+    filtered_y = filtered_y.dropna()
     return filtered_y
 
 def get_filtering_idx(outliers):
