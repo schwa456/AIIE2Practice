@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="\finalterm\data\dataset\dataset\X_train.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\midterm\problem1\TSV_Etch_Dataset\25um\FDC_Data\FDC_25um_Fault_C4F8_90to85_SCCM.CSV">
           <value>
             <Attribute>
