@@ -18,7 +18,7 @@ def get_filtered_X_data(X_data, filtering_idx):
 #######################################################
 
 def get_cat_vars(X_data):
-    cat_vars = X_data.columns.tolist()[1:9]
+    cat_vars = X_data.select_dtypes(include='object').columns.tolist()
     return cat_vars
 
 def get_cat_variance_df(X_data, y):
@@ -105,7 +105,7 @@ def get_bin_scatter_plot(variance_df):
     variance_df = variance_df.copy()
     variance_df['index'] = variance_df['index'].apply(lambda x: x.replace('X', ''))
 
-    variance_df.plot.scatter(x='index', y='variance')
+    variance_df.plot.scatter(x='index', y='variance', c=['red' if val==0 else 'blue' for val in variance_df['variance']])
 
 
     plt.xlabel('Binary Features')
@@ -146,7 +146,14 @@ def bin_variable_reduction(X_data):
 
 ################################################
 
-def get_reduced_X(X_data, reducible_vars):
+def get_reduced_X(X_data, y):
+    reducible_vars = []
+    cat_red_var = cat_variable_reduction(X_data, y)
+    reducible_vars.extend(cat_red_var)
+    ########################
+    bin_red_var = bin_variable_reduction(X_data)
+    reducible_vars.extend(bin_red_var)
+
     X_reduced = X_data.drop(columns=reducible_vars)
     print(f'Number of Stayed Variables : {X_reduced.shape[1]}')
     return X_reduced
@@ -165,14 +172,7 @@ def __main__():
     filtered_X_data = get_filtered_X_data(X_data, filtering_idx)
 
 
-    reducible_vars = []
-    cat_red_var = cat_variable_reduction(filtered_X_data, y)
-    reducible_vars.extend(cat_red_var)
-    ########################
-    bin_red_var = bin_variable_reduction(filtered_X_data)
-    reducible_vars.extend(bin_red_var)
-
-    X_reduced = get_reduced_X(filtered_X_data, reducible_vars)
+    X_reduced = get_reduced_X(filtered_X_data, y)
 
 
 if __name__ == '__main__':
