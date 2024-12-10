@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\finalterm\check\X_poly_removed.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\finalterm\check\X_reduced.csv">
           <value>
             <Attribute>

@@ -14,15 +14,14 @@ def get_interaction_df(X_data):
 
     interaction_df = pd.DataFrame(interaction_terms, columns = interaction_columns)
 
-    interaction_df = interaction_df.loc[:, interaction_df.columns.str.contains(r'\s')]
+    #interaction_df = interaction_df.loc[:, interaction_df.columns.str.contains(r'\s')]
 
     return interaction_df
 
 def interaction_linear_regression(interaction_df, y):
-    X = sm.add_constant(interaction_df)
-    model = sm.OLS(y, X).fit()
+    X_poly = sm.add_constant(interaction_df)
+    model = sm.OLS(y, X_poly).fit()
 
-    print(model.summary())
     with open('../check/OLS_summary.txt', 'w') as f:
         f.write(model.summary().as_text())
 
@@ -36,6 +35,17 @@ def interaction_linear_regression(interaction_df, y):
     })
 
     result.to_csv(f"../check/OLS_results.csv", index=False)
+
+    return model, X_poly
+
+def remove_over_p(X_data, X_poly, model):
+    significant_columns = model.pvalues[model.pvalues <= 0.05].index
+
+    original_columns = ['const'] + [col for col in X_data.columns if col in significant_columns]
+
+    final_X = X_poly[significant_columns.union(original_columns)]
+
+    return final_X
 
 def __main__():
     y = get_output()
@@ -57,15 +67,14 @@ def __main__():
     print(interaction_df.shape)
     print(y.shape)
 
-    print(interaction_df.index)
-    print(y.index)
-
     interaction_df.index = y.index
 
-    print(interaction_df.index)
-    print(y.index)
+    linear_model, X_poly = interaction_linear_regression(interaction_df, y)
 
-    interaction_linear_regression(interaction_df, y)
+    X_poly_removed = remove_over_p(X_label_encoded, X_poly, linear_model)
+    X_poly_removed.to_csv('../check/X_poly_removed.csv')
+    print(X_poly_removed.shape)
+    print(X_poly_removed.columns)
 
 if __name__ == '__main__':
     __main__()
