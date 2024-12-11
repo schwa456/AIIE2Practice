@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from sklearn.random_projection import GaussianRandomProjection
-import matplotlib.pyplot as plt
 
 def calculate_n_components(X, epsilon):
     n_samples = X.shape[0]
@@ -29,7 +28,7 @@ def grp(X, epsilon):
 def __main__():
     X_poly_removed = pd.read_csv('../check/X_poly_removed.csv')
 
-    epsilon = 0.3
+    epsilon = 0.2
 
     X_projected = grp(X_poly_removed, epsilon)
     print(X_projected.shape)
