@@ -32,6 +32,8 @@ def __main__():
 
     X_projected = grp(X_poly_removed, epsilon)
     print(X_projected.shape)
+    grp_X = pd.DataFrame(X_projected)
+    grp_X.to_csv('../check/grp_X.csv')
 
 
 if __name__ == '__main__':

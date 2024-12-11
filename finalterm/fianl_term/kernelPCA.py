@@ -6,7 +6,7 @@ from sklearn.metrics import explained_variance_score
 
 
 class DynamicKernelPCA:
-    def __init__(self, kernel='poly', gamma=None, degree=3, coef0=1, alpha=1.0, target_variance=0.9):
+    def __init__(self, kernel='rbf', gamma=None, degree=3, coef0=1, alpha=1.0, target_variance=0.9):
         """
         Kernal PCA Class
         :param kernel: kernel used for fitting('linear, 'poly', 'rbf', 'sigmoid')
@@ -78,13 +78,6 @@ class DynamicKernelPCA:
 
 
 def __main__():
-    """
-    t = np.linspace(0, 2* np.pi, 100)
-    x = t * np.cos(t)
-    y = t * np.sin(t)
-    data = np.vstack((x, y)).T
-    """
-
     X_poly_removed = pd.read_csv('../check/X_poly_removed.csv')
 
     kpca = DynamicKernelPCA(kernel='rbf', gamma=15, target_variance=0.9)
@@ -93,20 +86,8 @@ def __main__():
 
     print(data_reduced)
     print(f"Reduced Data Size: {data_reduced.shape}")
-"""
-    plt.figure(figsize=(10, 5))
-
-    plt.subplot(1, 2, 1)
-    plt.scatter(X_poly_removed[:, 0], X_poly_removed[:, 1], c='r', marker='o')
-    plt.title("Original Data")
-
-    # Kernel PCA 변환 데이터
-    plt.subplot(1, 2, 2)
-    plt.scatter(transformed_data[:, 0], transformed_data[:, 1], c='b', marker='o')
-    plt.title("Transformed Data (Kernel PCA)")
-
-    plt.show()
-    """
+    kernel_pca_X = pd.DataFrame(data_reduced)
+    kernel_pca_X.to_csv('../check/kernel_pca_X.csv')
 
 if __name__ == '__main__':
     __main__()

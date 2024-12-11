@@ -3,9 +3,6 @@ import numpy as np
 from sklearn.decomposition import IncrementalPCA
 import matplotlib.pyplot as plt
 
-from output_histogram import *
-from small_dist_reduction import *
-from label_encoding import *
 from interaction_regression import *
 
 
@@ -63,36 +60,14 @@ class DynamicPCA:
         return self.scores_
 
 def __main__():
-    """
-    y = get_output()
-
-    outlier_boundary = get_outlier(y)
-    outliers = get_number_of_outliers(y, outlier_boundary)
-
-    y = get_filtered_y(y, outliers)
-
-    filtering_idx = get_filtering_idx(outliers)
-
-    X_data = get_X_data()
-    filtered_X_data = get_filtered_X_data(X_data, filtering_idx)
-    X_reduced = get_reduced_X(filtered_X_data, y)
-    X_label_encoded = get_label_encoded_X(X_reduced)
-
-    interaction_df = get_interaction_df(X_label_encoded)
-
-    interaction_df.index = y.index
-
-    linear_model, X_poly = interaction_linear_regression(interaction_df, y)
-
-    X_poly_removed = remove_over_p(X_label_encoded, X_poly, linear_model)
-    """
-
     X_poly_removed = pd.read_csv('../check/X_poly_removed.csv')
 
     pca = DynamicPCA()
     data_reduced = pca.fit_transform(X_poly_removed)
     print(data_reduced)
     print(f"Reduced Data Size: {data_reduced.shape}")
+    X_linear_pca = pd.DataFrame(data_reduced)
+    X_linear_pca.to_csv('../check/linear_pca_X.csv')
 
 if __name__ == '__main__':
     __main__()
