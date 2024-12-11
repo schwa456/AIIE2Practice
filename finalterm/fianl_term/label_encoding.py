@@ -1,6 +1,6 @@
 import pandas as pd
-from output_histogram import *
-from small_dist_reduction import *
+from .output_histogram import *
+from .small_dist_reduction import *
 from sklearn.preprocessing import LabelEncoder
 
 def get_label_encoded_X(X_data):

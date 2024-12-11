@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.decomposition import IncrementalPCA
 import matplotlib.pyplot as plt
 
-from interaction_regression import *
+from .interaction_regression import *
 
 
 class DynamicPCA:

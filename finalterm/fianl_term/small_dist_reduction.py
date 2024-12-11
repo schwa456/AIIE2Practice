@@ -1,9 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from output_histogram import *
+from .output_histogram import *
 
-X_TRAIN_PATH = '../data/dataset/dataset/X_train.csv'
+X_TRAIN_PATH = './data/dataset/dataset/X_train.csv'
 
 def get_X_data():
     file_path = X_TRAIN_PATH

@@ -1,9 +1,9 @@
 import pandas as pd
 from sklearn.preprocessing import PolynomialFeatures
 import statsmodels.api as sm
-from output_histogram import *
-from small_dist_reduction import *
-from label_encoding import *
+from .output_histogram import *
+from .small_dist_reduction import *
+from .label_encoding import *
 
 def get_interaction_df(X_data):
     poly = PolynomialFeatures(degree = 2, interaction_only=True, include_bias=False)

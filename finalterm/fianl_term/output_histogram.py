@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 FILTER_IDX = None
-Y_PATH = '../data/dataset/dataset/y_train.csv'
+Y_PATH = './data/dataset/dataset/y_train.csv'
 QUANT_VAL = 0.9999
 
 def get_output():

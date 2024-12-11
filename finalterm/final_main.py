@@ -25,7 +25,7 @@ def get_poly_removed_X():
 
     return X_poly_removed
 
-def get_X_data(method):
+def get_X_data_of_method(method):
     X_poly_removed = get_poly_removed_X()
     if method == 'normal':
         return X_poly_removed
@@ -76,14 +76,14 @@ def __main__():
     for method in methods:
         method_result = []
         for model in models:
-            X_data = get_X_data(method)
+            X_data = get_X_data_of_method(method)
             score = get_score(model, X_data, y)
             method_result.append(score)
         result_dict[method] = method_result
 
     result_df = pd.DataFrame(result_dict)
 
-    result_df.to_csv('../check/comparison.csv')
+    result_df.to_csv('./check/comparison.csv')
 
 if __name__ == '__main__':
     __main__()
