@@ -7,7 +7,7 @@ from .interaction_regression import *
 
 
 class DynamicPCA:
-    def __init__(self, target_variance=0.999):
+    def __init__(self, target_variance=0.9):
         self.target_variance = target_variance
         self.n_components = None
         self.ipca = None
@@ -60,14 +60,14 @@ class DynamicPCA:
         return self.scores_
 
 def __main__():
-    X_poly_removed = pd.read_csv('../check/X_poly_removed.csv')
+    X_poly_removed = pd.read_csv('./check/X_poly_removed.csv')
 
     pca = DynamicPCA()
     data_reduced = pca.fit_transform(X_poly_removed)
     print(data_reduced)
     print(f"Reduced Data Size: {data_reduced.shape}")
     X_linear_pca = pd.DataFrame(data_reduced)
-    X_linear_pca.to_csv('../check/linear_pca_X.csv')
+    X_linear_pca.to_csv('/check/linear_pca_X.csv')
 
 if __name__ == '__main__':
     __main__()

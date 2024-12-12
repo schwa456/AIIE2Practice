@@ -26,14 +26,14 @@ def grp(X, epsilon):
     return X_projected
 
 def __main__():
-    X_poly_removed = pd.read_csv('../check/X_poly_removed.csv')
+    X_poly_removed = pd.read_csv('./check/X_poly_removed.csv')
 
     epsilon = 0.2
 
     X_projected = grp(X_poly_removed, epsilon)
     print(X_projected.shape)
     grp_X = pd.DataFrame(X_projected)
-    grp_X.to_csv('../check/grp_X.csv')
+    grp_X.to_csv('./check/grp_X.csv')
 
 
 if __name__ == '__main__':

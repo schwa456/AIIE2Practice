@@ -78,7 +78,7 @@ class DynamicKernelPCA:
 
 
 def __main__():
-    X_poly_removed = pd.read_csv('../check/X_poly_removed.csv')
+    X_poly_removed = pd.read_csv('./check/X_poly_removed.csv')
 
     kpca = DynamicKernelPCA(kernel='rbf', gamma=15, target_variance=0.9)
 
@@ -87,7 +87,7 @@ def __main__():
     print(data_reduced)
     print(f"Reduced Data Size: {data_reduced.shape}")
     kernel_pca_X = pd.DataFrame(data_reduced)
-    kernel_pca_X.to_csv('../check/kernel_pca_X.csv')
+    kernel_pca_X.to_csv('./check/kernel_pca_X.csv')
 
 if __name__ == '__main__':
     __main__()

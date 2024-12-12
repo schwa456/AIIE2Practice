@@ -61,7 +61,7 @@ def pls(X_data, y):
 
     kf = KFold(n_splits=5, shuffle=True, random_state=42)
 
-    scores = cross_val_score(model, X_data, y, cv=kf, scoring='r2')
+    scores = cross_val_score(model.pls, X_data, y, cv=kf, scoring='r2')
 
     print(f"5-fold CV R^2 score: {scores}")
     print(f"mean R^2 score: {np.mean(scores)}")
@@ -71,41 +71,41 @@ def pls(X_data, y):
 
 def __main__():
     # y data
-    y = pd.read_csv('../check/y.csv')
+    y = pd.read_csv('./check/y.csv')
 
     result_dict = {}
 
     # poly_removed X data
     print("PLS with Poly removed")
-    poly_removed_X = pd.read_csv('../check/X_poly_removed.csv')
+    poly_removed_X = pd.read_csv('./check/X_poly_removed.csv')
     poly_removed_pls = pls(poly_removed_X, y)
     result_dict["Poly removed"] = poly_removed_pls
     print("=" * 50)
 
     # linear PCA X data
     print("PLS with Linear PCA")
-    linear_pca_X = pd.read_csv('../check/linear_pca_X.csv')
+    linear_pca_X = pd.read_csv('./check/linear_pca_X.csv')
     linear_pca_pls = pls(linear_pca_X, y)
     result_dict["Linear PCA"] = linear_pca_pls
     print("=" * 50)
 
     # kernel PCA X data
     print("PLS with Kernel PCA")
-    kernel_pca_X = pd.read_csv('../check/kernel_pca_X.csv')
+    kernel_pca_X = pd.read_csv('./check/kernel_pca_X.csv')
     kernel_pca_pls = pls(kernel_pca_X, y)
     result_dict["Kernel PCA"] = kernel_pca_pls
     print("=" * 50)
 
     # GPR X data
     print("PLS with Gaussian Random Projection")
-    grp_X = pd.read_csv('../check/grp_X.csv')
+    grp_X = pd.read_csv('./check/grp_X.csv')
     grp_pls = pls(grp_X, y)
     result_dict["Gaussian Random Projection"] = grp_pls
     print("=" * 50)
 
     result = pd.DataFrame(result_dict)
     print(result)
-    result.to_csv('../check/pls.csv', index=False)
+    result.to_csv('./check/pls.csv', index=False)
 
 if __name__ == '__main__':
     __main__()

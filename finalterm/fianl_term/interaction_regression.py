@@ -22,7 +22,7 @@ def interaction_linear_regression(interaction_df, y):
     X_poly = sm.add_constant(interaction_df)
     model = sm.OLS(y, X_poly).fit()
 
-    with open('../check/OLS_summary.txt', 'w') as f:
+    with open('./check/OLS_summary.txt', 'w') as f:
         f.write(model.summary().as_text())
 
     result = pd.DataFrame({
@@ -34,7 +34,7 @@ def interaction_linear_regression(interaction_df, y):
         'Confidence Interval(Upper)': model.conf_int()[1],
     })
 
-    result.to_csv(f"../check/OLS_results.csv", index=False)
+    result.to_csv(f"./check/OLS_results.csv", index=False)
 
     return model, X_poly
 
@@ -54,7 +54,7 @@ def __main__():
     outliers = get_number_of_outliers(y, outlier_boundary)
 
     y = get_filtered_y(y, outliers)
-    y.to_csv('../check/y.csv')
+    y.to_csv('./check/y.csv')
 
     filtering_idx = get_filtering_idx(outliers)
 
@@ -72,7 +72,7 @@ def __main__():
     linear_model, X_poly = interaction_linear_regression(interaction_df, y)
 
     X_poly_removed = remove_over_p(X_label_encoded, X_poly, linear_model)
-    X_poly_removed.to_csv('../check/X_poly_removed.csv')
+    X_poly_removed.to_csv('./check/X_poly_removed.csv')
     print(X_poly_removed.shape)
     print(X_poly_removed.columns)
 

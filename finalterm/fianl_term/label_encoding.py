@@ -27,12 +27,12 @@ def __main__():
 
     X_reduced = get_reduced_X(filtered_X_data, y)
 
-    X_reduced.to_csv('../check/X_reduced.csv', index=False)
+    X_reduced.to_csv('./check/X_reduced.csv', index=False)
 
     X_label_encoded = get_label_encoded_X(X_reduced)
     print(X_label_encoded)
 
-    X_label_encoded.to_csv('../check/X_label_encoded.csv', index=False)
+    X_label_encoded.to_csv('./check/X_label_encoded.csv', index=False)
 
 if __name__ == '__main__':
     __main__()
