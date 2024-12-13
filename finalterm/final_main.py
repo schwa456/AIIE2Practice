@@ -25,7 +25,7 @@ def get_poly_removed_X():
 
     return X_poly_removed
 
-def get_X_data_of_method(method, X_poly_removed):
+def get_X_data_of_method(method, X_poly_removed, epsilon=0.2):
     if method == 'normal':
         return X_poly_removed
     elif method == 'linear pca':
@@ -39,18 +39,17 @@ def get_X_data_of_method(method, X_poly_removed):
         X_kernel_pca = pd.DataFrame(X_reduced)
         return X_kernel_pca
     elif method == 'grp':
-        epsilon = 0.2
         X_reduced = grp(X_poly_removed, epsilon)
         X_grp = pd.DataFrame(X_reduced)
         return X_grp
     else:
         raise ValueError("'method' must be one of these : 'normal', 'linear pca', 'kernel pca', 'grp'")
 
-def get_score(model, X_data, y):
+def get_score(model, X_data, y, threshold):
     if model == 'random forest':
         score = random_forest(X_data, y)
     elif model == 'pls':
-        score = pls(X_data, y)
+        score = pls(X_data, y, threshold)
     elif model == 'kernel ridge':
         score = kernel_ridge(X_data, y)
     elif model == 'gpr':
@@ -59,6 +58,12 @@ def get_score(model, X_data, y):
         raise ValueError
 
     return score
+
+def get_grp_pls( X_poly_removed, y, threshold, epsilon):
+    X_data = get_X_data_of_method('grp', X_poly_removed, epsilon)
+    score = get_score('pls', X_data, y, threshold)
+    return score
+
 
 def __main__():
     methods = ['normal',
@@ -79,6 +84,7 @@ def __main__():
 
     X_poly_removed = get_poly_removed_X()
 
+    """
     for method in methods:
         method_result = []
         for model in models:
@@ -93,6 +99,23 @@ def __main__():
     result_df = pd.DataFrame(result_dict)
 
     result_df.to_csv('./check/comparison.csv')
+    """
+
+    thresholds = [0.9, 0.95, 0.99]
+    epsilons = [0.1, 0.2, 0.3]
+
+    grp_pls = {}
+
+    for epsilon in epsilons:
+        for threshold in thresholds:
+            print("=" * 50)
+            print(f"epsilon: {epsilon}, threshold: {threshold}")
+            score = get_grp_pls(X_poly_removed, y, threshold, epsilon)
+            grp_pls[epsilon] = score
+            print(f"R^2 score : {score}")
+            print("=" * 50)
+    grp_pls_df = pd.DataFrame(grp_pls)
+    grp_pls_df.to_csv('./check/grp_pls_df.csv')
 
 if __name__ == '__main__':
     __main__()

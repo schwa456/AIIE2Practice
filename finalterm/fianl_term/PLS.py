@@ -55,8 +55,8 @@ class DynamicPLS():
 
         return optimal_n_components
 
-def pls(X_data, y):
-    model = DynamicPLS()
+def pls(X_data, y, threshold=0.95):
+    model = DynamicPLS(threshold)
     model.fit_transform(X_data, y)
 
     kf = KFold(n_splits=5, shuffle=True, random_state=42)

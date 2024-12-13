@@ -4,14 +4,10 @@ from sklearn.random_projection import GaussianRandomProjection
 
 def calculate_n_components(X, epsilon):
     n_samples = X.shape[0]
-    print(n_samples)
     numerator = 4 * np.log(n_samples)
-    print(numerator)
     denominator = (epsilon**2 / 2)-(epsilon**3 / 3)
-    print(denominator)
 
     result = int(np.ceil(numerator/denominator))
-    print(result)
     return result
 
 def grp(X, epsilon):
