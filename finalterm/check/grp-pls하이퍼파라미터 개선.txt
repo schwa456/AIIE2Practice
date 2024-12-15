@@ -1,0 +1,108 @@
+C:\Users\itkw\PycharmProjects\cat_status\.venv\Scripts\python.exe C:\Users\itkw\PycharmProjects\AIIE2Practice\finalterm\final_table.py 
+99.99 percentile 값: 230.98
+Number of Outliers: 1
+Outlier Index: 757
+Outlier Value: 265.32
+99.99 percentile 값: 230.98
+Number of Outliers: 1
+Outlier Index: 757
+Outlier Value: 265.32
+Number of Categorical Variables that will be reduced : 2
+Reduction Categorical Variable of ['X0', 'X4']
+Number of Binary Variables that will be Reduced : 185
+Number of Stayed Variables : 189
+==================================================
+epsilon: 0.1, threshold: 0.9
+Number of Selected Components: 7019
+Projected data shape: (3599, 7019)
+Number of Selected Features: 4671
+5-fold CV R^2 score: [-1.19438325e+32 -8.26816003e+31 -1.02727871e+32 -8.09112465e+31
+ -4.39930798e+31]
+mean R^2 score: -8.59504245892956e+31
+std R^2 score: 2.529592664826985e+31
+R^2 score : (-8.59504245892956e+31, <fianl_term.PLS.DynamicPLS object at 0x000001E820927F80>)
+==================================================
+==================================================
+epsilon: 0.1, threshold: 0.95
+Number of Selected Components: 7019
+Projected data shape: (3599, 7019)
+Number of Selected Features: 4671
+5-fold CV R^2 score: [-1.19438325e+32 -8.26816003e+31 -1.02727871e+32 -8.09112465e+31
+ -4.39930798e+31]
+mean R^2 score: -8.59504245892956e+31
+std R^2 score: 2.529592664826985e+31
+R^2 score : (-8.59504245892956e+31, <fianl_term.PLS.DynamicPLS object at 0x000001E8208E44D0>)
+==================================================
+==================================================
+epsilon: 0.1, threshold: 0.99
+Number of Selected Components: 7019
+Projected data shape: (3599, 7019)
+Number of Selected Features: 4671
+5-fold CV R^2 score: [-1.19438325e+32 -8.26816003e+31 -1.02727871e+32 -8.09112465e+31
+ -4.39930798e+31]
+mean R^2 score: -8.59504245892956e+31
+std R^2 score: 2.529592664826985e+31
+R^2 score : (-8.59504245892956e+31, <fianl_term.PLS.DynamicPLS object at 0x000001E81DEDC500>)
+==================================================
+==================================================
+epsilon: 0.2, threshold: 0.9
+Number of Selected Components: 1890
+Projected data shape: (3599, 1890)
+Number of Selected Features: 57
+5-fold CV R^2 score: [0.49856234 0.47676209 0.44926711 0.48319475 0.54178616]
+mean R^2 score: 0.48991448924462205
+std R^2 score: 0.03044932074360115
+R^2 score : (0.48991448924462205, <fianl_term.PLS.DynamicPLS object at 0x000001E8208E43E0>)
+==================================================
+==================================================
+epsilon: 0.2, threshold: 0.95
+Number of Selected Components: 1890
+Projected data shape: (3599, 1890)
+Number of Selected Features: 57
+5-fold CV R^2 score: [0.49856234 0.47676209 0.44926711 0.48319475 0.54178616]
+mean R^2 score: 0.48991448924462205
+std R^2 score: 0.03044932074360115
+R^2 score : (0.48991448924462205, <fianl_term.PLS.DynamicPLS object at 0x000001E82307F7A0>)
+==================================================
+==================================================
+epsilon: 0.2, threshold: 0.99
+Number of Selected Components: 1890
+Projected data shape: (3599, 1890)
+Number of Selected Features: 57
+5-fold CV R^2 score: [0.49856234 0.47676209 0.44926711 0.48319475 0.54178616]
+mean R^2 score: 0.48991448924462205
+std R^2 score: 0.03044932074360115
+R^2 score : (0.48991448924462205, <fianl_term.PLS.DynamicPLS object at 0x000001E8230996A0>)
+==================================================
+==================================================
+epsilon: 0.3, threshold: 0.9
+Number of Selected Components: 910
+Projected data shape: (3599, 910)
+Number of Selected Features: 56
+5-fold CV R^2 score: [0.50111175 0.4801805  0.4562771  0.48340835 0.53136497]
+mean R^2 score: 0.490468531931176
+std R^2 score: 0.024942094670374865
+R^2 score : (0.490468531931176, <fianl_term.PLS.DynamicPLS object at 0x000001E82084FF80>)
+==================================================
+==================================================
+epsilon: 0.3, threshold: 0.95
+Number of Selected Components: 910
+Projected data shape: (3599, 910)
+Number of Selected Features: 56
+5-fold CV R^2 score: [0.50111175 0.4801805  0.4562771  0.48340835 0.53136497]
+mean R^2 score: 0.490468531931176
+std R^2 score: 0.024942094670374865
+R^2 score : (0.490468531931176, <fianl_term.PLS.DynamicPLS object at 0x000001E8211678F0>)
+==================================================
+==================================================
+epsilon: 0.3, threshold: 0.99
+Number of Selected Components: 910
+Projected data shape: (3599, 910)
+Number of Selected Features: 56
+5-fold CV R^2 score: [0.50111175 0.4801805  0.4562771  0.48340835 0.53136497]
+mean R^2 score: 0.490468531931176
+std R^2 score: 0.024942094670374865
+R^2 score : (0.490468531931176, <fianl_term.PLS.DynamicPLS object at 0x000001E82318ED50>)
+==================================================
+
+종료 코드 0(으)로 완료된 프로세스

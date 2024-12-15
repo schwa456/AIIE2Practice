@@ -37,6 +37,7 @@ def get_cat_variance_df(X_data, y):
     return variance_df
 
 def get_cat_reducible_vars(variance_df):
+    print(variance_df.columns)
     q1_values = variance_df['mean_variance'].quantile(0.25)
     below_q1 = variance_df[variance_df['mean_variance'] <= q1_values]['index']
     below_q1 = below_q1.tolist()
