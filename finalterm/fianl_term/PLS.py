@@ -67,7 +67,7 @@ def pls(X_data, y, threshold=0.95):
     print(f"mean R^2 score: {np.mean(scores)}")
     print(f"std R^2 score: {np.std(scores)}")
 
-    return np.mean(scores)
+    return np.mean(scores), model
 
 def __main__():
     # y data

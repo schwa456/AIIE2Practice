@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\finalterm\check\grp_pls_df.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\finalterm\check\interaction_df.csv">
           <value>
             <Attribute>
@@ -46,6 +53,13 @@
           </value>
         </entry>
         <entry key="\finalterm\check\y.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\finalterm\data\dataset\dataset\X_test.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
